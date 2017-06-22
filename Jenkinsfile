@@ -27,7 +27,7 @@ docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/jenkins-s
     stage('TEST') {
       steps {
         echo 'Create TEST environment in AWS'
-        sh '''instanceID=$(aws ec2 describe-instance-status --instance-ids i-0c02f6e4791251ae4 --query 'InstanceStatuses[*].InstanceId' --region us-east-2  --output text | awk '{print $1}')
+        sh '''instanceID=$(aws ec2 describe-instance-status --instance-ids i-0c02f6e4791251ae4 --query 'InstanceStatuses[*].InstanceId' --region us-east-2 --output text | awk '{print $1}')
 if [ "$instanceID" == "i-0c02f6e4791251ae4" ]; then
 echo "Instance exists http://13.59.175.163"
 else

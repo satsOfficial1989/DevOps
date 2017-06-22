@@ -15,5 +15,21 @@ pipeline {
         echo 'Run Jmeter Performance Tests in TEST'
       }
     }
+    stage('STAGE') {
+      steps {
+        echo 'Create STAGE environment in AWS'
+        echo 'Deploy latest Docker Build to STAGE'
+        echo 'Run Selenium Functional Tests in STAGE'
+        echo 'Run Jmeter Performance Tests in STAGE'
+      }
+    }
+    stage('PROD') {
+      steps {
+        echo 'Create PROD environment in AWS'
+        echo 'Deploy latest Docker Build to PROD'
+        echo 'Run Selenium Functional Tests in PROD'
+        echo 'Run Jmeter Performance Tests in PROD'
+      }
+    }
   }
 }

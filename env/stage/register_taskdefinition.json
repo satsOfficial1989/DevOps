@@ -1,0 +1,36 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "dc-sample-app",
+      "image": "687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-cicd-demo:latest",
+      "memory": 200,
+      "cpu": 10,
+      "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 80,
+                    "protocol": "tcp"
+                },
+                {
+                    "containerPort": 50000,
+                    "hostPort": 50000,
+                    "protocol": "tcp"
+                }
+            ],
+      "essential": true,
+      "privileged": false,
+            "user": "root",
+            "readonlyRootFilesystem": false
+        }
+  ],
+  "volumes": [
+        {
+            "name": "jenkins_home",
+            "host": {
+                "sourcePath": "/ecs/volumes/jenkins_home"
+            }
+        }
+    ],
+  "family": "example_task_1",
+  "taskRoleArn": "arn:aws:iam::687517088689:role/ecsInstanceRole"
+}

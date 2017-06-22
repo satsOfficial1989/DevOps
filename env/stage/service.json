@@ -1,0 +1,11 @@
+{
+    "cluster": "test",
+    "serviceName": "app-test-service",
+    "taskDefinition": "example_task_1",
+    "desiredCount": 2,
+    "clientToken": "random_value_here",
+    "deploymentConfiguration": {
+        "maximumPercent": 200,
+        "minimumHealthyPercent": 50
+    }
+}

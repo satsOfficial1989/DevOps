@@ -32,7 +32,7 @@ docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/jenkins-s
 
 
 
-aws ec2 run-instances --image-id ami-3883a55d --count 1 --instance-type t2.micro --key-name jenkins-keypair --security-group-ids sg-f515cd9c --subnet-id subnet-5f17f824 --region us-east-2'''
+aws ec2 run-instances --image-id ami-3883a55d --count 1 --instance-type t2.micro --key-name dc-demo-key --security-group-ids sg-f515cd9c --subnet-id subnet-5f17f824 --region us-east-2'''
         echo 'Deploy latest Docker Build to TEST'
         sh '''#ssh -i /home/ec2-user/jenkins_keypair.pem ec2-user@13.59.159.158 docker stop '$(docker ps -q)'
 #ssh -i /home/ec2-user/jenkins_keypair.pem ec2-user@13.59.159.158 docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/jenkins-server-demo:latest

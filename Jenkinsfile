@@ -40,6 +40,7 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazon
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazonaws.com docker stop '$(docker ps -q)'
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazonaws.com docker pull 687517088689.dkr.ecr.us-east-2.amazonaws.com/jenkins-server-demo:latest
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazonaws.com docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/jenkins-server-demo:latest'''
+        echo 'TEST Environment : http://13.59.175.163'
       }
     }
     stage('STAGE') {
@@ -57,6 +58,7 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazon
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazonaws.com docker stop '$(docker ps -q)'
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazonaws.com docker pull 687517088689.dkr.ecr.us-east-2.amazonaws.com/jenkins-server-demo:latest
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazonaws.com docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/jenkins-server-demo:latest'''
+        echo 'STAGE Environment : http://13.59.159.158'
       }
     }
     stage('PROD') {
@@ -74,6 +76,7 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazon
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com docker stop '$(docker ps -q)'
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com docker pull 687517088689.dkr.ecr.us-east-2.amazonaws.com/jenkins-server-demo:latest
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/jenkins-server-demo:latest'''
+        echo 'PROD Environment : http://13.59.140.240'
       }
     }
   }

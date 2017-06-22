@@ -29,6 +29,7 @@ docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/jenkins-s
 '''
         echo 'DEV Environment : http://13.59.144.120'
         build(job: 'SeleniumTesting-DEV', wait: true)
+        sh 'cat /home/ec2-user/jenkins/jobs/SeleniumTesting-DEV/lastSuccessful/log'
       }
     }
     stage('TEST') {

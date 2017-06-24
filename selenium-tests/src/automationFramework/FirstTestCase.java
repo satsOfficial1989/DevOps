@@ -18,7 +18,7 @@ public class FirstTestCase {
 				driver.get(envurl);
 		 
 		        // Print a Log In message to the screen
-		        System.out.println("\nFunctional Sanity Testing Completed for the " + envtype + " environment: " + envurl);
+		        System.out.println("\nFunctional Testing Completed for the " + envtype + " environment: " + envurl);
 		 
 				//Wait for 5 Sec
 				Thread.sleep(20);

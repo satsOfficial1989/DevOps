@@ -86,5 +86,3 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazon
     }
   }
 }
-  }
-}

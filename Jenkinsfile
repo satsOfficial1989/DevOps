@@ -77,11 +77,11 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazon
 
        stage("Go/No-Go?") {
             steps {
-                script {
-                    env.RELEASE_DECISION = input message: 'User input required', ok: 'Release to Production!',
-                            parameters: [choice(name: 'RELEASE_DECISION', choices: 'Approved\nReject', description: 'Is this release ready to go to Production?')]
-                }
-                echo "${env.RELEASE_DECISION}"
+              script {
+                 def userInput = input(
+                 id: 'userInput', message: 'Approved for Production?' 
+                 )
+              }
             }
         }
     

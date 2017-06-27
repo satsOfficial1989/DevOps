@@ -69,6 +69,14 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazon
         build 'JMeterTesting-STAGE'
       }
     }
+
+stage('User Input') {
+    steps {
+        input message: 'User input required', ok: 'Release to PROD!’,
+            parameters: [choice(name: 'RELEASE_CONFIRM’, choices: ‘Approved\nRejected’, description: ‘Approval for Production Release?’)]
+        echo "env: ${env.RELEASE_CONFIRM}”
+    }
+}
     stage('PROD') {
       steps {
         echo 'Create PROD environment in AWS'

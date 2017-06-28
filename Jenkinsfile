@@ -3,16 +3,16 @@ pipeline {
     node {
       label 'master'
     }
-    
+
   }
   stages {
     stage('DEV') {
       steps {
-        
+
        script {
           currentBuild.displayName = "#1.0.${BUILD_ID}"
         }
-        
+
         echo 'Build Docker Image for the Application'
         sh '''echo "Build Docker Image of the Application"
 $(aws ecr get-login --region us-east-2)
@@ -43,7 +43,7 @@ docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/jenkins-s
 if [ "$instanceID" == "i-0c02f6e4791251ae4" ]; then
 echo "Instance exists http://13.59.175.163"
 else
-aws ec2 run-instances --image-id ami-3883a55d --count 1 --instance-type t2.micro --key-name jenkins-keypair --security-group-ids sg-f515cd9c --subnet-id subnet-5f17f824 --region us-east-2
+aws cloudformation create-stack --stack-name dc-cicd-test --template-body https://raw.githubusercontent.com/DC-2017/DevOps/master/env/test/ec2-deploy.json
 fi'''
         echo 'Deploy latest Docker Build to TEST'
         sh '''cd /home/ec2-user
@@ -62,7 +62,7 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazon
 if [ "$instanceID" == "i-071f32c84a83c25c3" ]; then
 echo "Instance exists http://13.59.159.158"
 else
-aws ec2 run-instances --image-id ami-3883a55d --count 1 --instance-type t2.micro --key-name jenkins-keypair --security-group-ids sg-f515cd9c --subnet-id subnet-5f17f824 --region us-east-2
+aws cloudformation create-stack --stack-name dc-cicd-stage --template-body https://raw.githubusercontent.com/DC-2017/DevOps/master/env/stage/ec2-deploy.json
 fi'''
         echo 'Deploy latest Docker Build to STAGE'
         sh '''cd /home/ec2-user
@@ -79,12 +79,12 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazon
             steps {
               script {
                  def userInput = input(
-                 id: 'userInput', message: 'Approved for Production?' 
+                 id: 'userInput', message: 'Approved for Production?'
                  )
               }
             }
         }
-    
+
     stage('PROD') {
       steps {
         echo 'Create PROD environment in AWS'
@@ -92,7 +92,7 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazon
 if [ "$instanceID" == "i-0db66a1affb72970f" ]; then
 echo "Instance exists http://13.59.140.240"
 else
-aws ec2 run-instances --image-id ami-3883a55d --count 1 --instance-type t2.micro --key-name jenkins-keypair --security-group-ids sg-f515cd9c --subnet-id subnet-5f17f824 --region us-east-2
+aws cloudformation create-stack --stack-name dc-cicd-stage --template-body https://raw.githubusercontent.com/DC-2017/DevOps/master/env/prod/ec2-deploy.json
 fi'''
         echo 'Deploy latest Docker Build to PROD'
         sh '''cd /home/ec2-user

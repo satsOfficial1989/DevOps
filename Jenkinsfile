@@ -13,10 +13,11 @@ pipeline {
           currentBuild.displayName = "#1.0.${BUILD_ID}"
         }
 
+        sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Continuous Delivery : STARTS", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
         echo 'Build Docker Image for the Application'
         sh '''echo "Build Docker Image of the Application"
 $(aws ecr get-login --region us-east-2)
-cd demo-app-2
+cd demo-app-1
 docker build -t dc-demo-app-image .
 
 echo "Tag the Image"
@@ -103,5 +104,11 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazon
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest'''
       }
     }
+  }
+  
+  post { 
+      always { 
+          sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Continuous Delivery : ENDS", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
+      }
   }
 }

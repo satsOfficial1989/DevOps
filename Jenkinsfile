@@ -13,7 +13,7 @@ pipeline {
           currentBuild.displayName = "#1.0.${BUILD_ID}"
         }
 
-        sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Continuous Delivery : STARTS", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
+        sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Continuous Delivery Pipeline : STARTS", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
         echo 'Build Docker Image for the Application'
         sh '''echo "Build Docker Image of the Application"
 $(aws ecr get-login --region us-east-2)
@@ -36,6 +36,7 @@ docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-a
 '''
         build(job: 'SeleniumTesting-DEV', wait: true)
         build 'JMeterTesting-DEV'
+	   sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to DEV", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       }
     }
     stage('TEST') {
@@ -55,6 +56,7 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazon
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazonaws.com docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest'''
         build 'SeleniumTesting-TEST'
         build 'JMeterTesting-TEST'
+		sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to TEST", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       }
     }
     stage('STAGE') {
@@ -74,6 +76,7 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazon
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazonaws.com docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest'''
         build 'SeleniumTesting-STAGE'
         build 'JMeterTesting-STAGE'
+		sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to STAGE", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       }
     }
 
@@ -102,13 +105,14 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazon
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com docker stop '$(docker ps -q)'
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com docker pull 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest'''
+sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to PROD", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       }
     }
   }
   
   post { 
       always { 
-          sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Continuous Delivery : ENDS", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
+          sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Continuous Delivery Pipeline: ENDS", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       }
   }
 }

@@ -13,7 +13,7 @@ pipeline {
           currentBuild.displayName = "#1.0.${BUILD_ID}"
         }
 
-        echo 'Build Docker Image for the Application'
+        echo 'Build Docker Image for the Applicationn'
         sh '''echo "Build Docker Image of the Application"
 $(aws ecr get-login --region us-east-2)
 cd demo-app-1

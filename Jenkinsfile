@@ -14,7 +14,7 @@ pipeline {
         }
 
         sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Continuous Delivery Pipeline : STARTS", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
-        echo 'Build Docker Image for the Application'
+        echo 'BUILD DOCKER IMAGE, TAG IT, UPDATE REPO AND DEPLOY'
         sh '''echo "Build Docker Image of the Application"
 $(aws ecr get-login --region us-east-2)
 cd demo-app-1
@@ -34,27 +34,34 @@ docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-a
 
 
 '''
-        build(job: 'SeleniumTesting-DEV', wait: true)
+        echo 'RUN FUNCTIONAL TESTS'
+	build(job: 'SeleniumTesting-DEV', wait: true)
+	      
+	echo 'RUN PERFORMANCE TESTS'
         build 'JMeterTesting-DEV'
 	   sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to DEV", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       }
     }
     stage('TEST') {
       steps {
-        echo 'Create TEST environment in AWS'
+        echo 'CREATE TEST ENVIRONMENT IN AWS'
         sh '''instanceID=$(aws ec2 describe-instance-status --instance-ids i-0c02f6e4791251ae4 --query 'InstanceStatuses[*].InstanceId' --region us-east-2 --output text | awk '{print $1}')
 if [ "$instanceID" == "i-0c02f6e4791251ae4" ]; then
 echo "Instance exists http://13.59.175.163"
 else
 aws cloudformation create-stack --stack-name dc-cicd-test --template-body https://raw.githubusercontent.com/DC-2017/DevOps/master/env/test/ec2-deploy.json
 fi'''
-        echo 'Deploy latest Docker Build to TEST'
+        echo 'DEPLOY LATEST DOCKER BUILD IMAGE TO TEST'
         sh '''cd /home/ec2-user
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazonaws.com $(aws ecr get-login --region us-east-2)
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazonaws.com docker stop '$(docker ps -q)'
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazonaws.com docker pull 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazonaws.com docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest'''
-        build 'SeleniumTesting-TEST'
+        
+	echo 'RUN FUNCTIONAL TESTS IN TEST'
+	build 'SeleniumTesting-TEST'
+	      
+	echo 'RUN PERFORMANCE TESTS IN TEST'      
         build 'JMeterTesting-TEST'
 		sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to TEST", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       }

@@ -17,7 +17,7 @@ pipeline {
         echo 'Build Docker Image for the Application'
         sh '''echo "Build Docker Image of the Application"
 $(aws ecr get-login --region us-east-2)
-cd demo-app-2
+cd demo-app-1
 docker build -t dc-demo-app-image .
 
 echo "Tag the Image"
@@ -106,7 +106,7 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazon
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com docker pull 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest'''
 sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to PROD", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
-sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H \"Content-Type: application/json\" -X POST -d \'{"transition": {"id": "41"}}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-12/transitions'	      
+sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H \"Content-Type: application/json\" -X POST -d \'{"transition": {"id": "41"}}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-13/transitions'	      
       }
     }
   }

@@ -17,7 +17,7 @@ pipeline {
         echo 'Build Docker Image for the Application'
         sh '''echo "Build Docker Image of the Application"
 $(aws ecr get-login --region us-east-2)
-cd demo-app-1
+cd demo-app-2
 docker build -t dc-demo-app-image .
 
 echo "Tag the Image"

@@ -68,20 +68,24 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazon
     }
     stage('STAGE') {
       steps {
-        echo 'Create STAGE environment in AWS'
+        echo 'CREATE STAGE ENVIRONMENT IN AWS'
         sh '''instanceID=$(aws ec2 describe-instance-status --instance-ids i-071f32c84a83c25c3 --query 'InstanceStatuses[*].InstanceId' --region us-east-2 --output text | awk '{print $1}')
 if [ "$instanceID" == "i-071f32c84a83c25c3" ]; then
 echo "Instance exists http://13.59.159.158"
 else
 aws cloudformation create-stack --stack-name dc-cicd-stage --template-body https://raw.githubusercontent.com/DC-2017/DevOps/master/env/stage/ec2-deploy.json
 fi'''
-        echo 'Deploy latest Docker Build to STAGE'
+        echo 'DEPLOY LATEST DOCKER BUILD IMAGE TO STAGE'
         sh '''cd /home/ec2-user
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazonaws.com $(aws ecr get-login --region us-east-2)
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazonaws.com docker stop '$(docker ps -q)'
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazonaws.com docker pull 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazonaws.com docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest'''
-        build 'SeleniumTesting-STAGE'
+        
+	echo 'RUN FUNCTIONAL TESTS IN STAGE'
+	build 'SeleniumTesting-STAGE'
+	      
+	echo 'RUN PERFORMANCE TESTS IN STAGE'
         build 'JMeterTesting-STAGE'
 		sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to STAGE", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       }
@@ -99,14 +103,14 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazon
 
     stage('PROD') {
       steps {
-        echo 'Create PROD environment in AWS'
+        echo 'UPDATE PRODUCTION ENVIRONMENT'
         sh '''instanceID=$(aws ec2 describe-instance-status --instance-ids i-0db66a1affb72970f --query 'InstanceStatuses[*].InstanceId' --region us-east-2 --output text | awk '{print $1}')
 if [ "$instanceID" == "i-0db66a1affb72970f" ]; then
 echo "Instance exists http://13.59.140.240"
 else
 aws cloudformation create-stack --stack-name dc-cicd-stage --template-body https://raw.githubusercontent.com/DC-2017/DevOps/master/env/prod/ec2-deploy.json
 fi'''
-        echo 'Deploy latest Docker Build to PROD'
+        echo 'DEPLOY DOCKER BUILD IMAGE TO PROD'
         sh '''cd /home/ec2-user
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com $(aws ecr get-login --region us-east-2)
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com docker stop '$(docker ps -q)'

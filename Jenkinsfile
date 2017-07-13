@@ -24,7 +24,7 @@ echo "Tag the Image"
 docker tag dc-demo-app-image:latest 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest
 
 
-echo "Push the Image to AWS container repository"
+echo "Push the image to AWS container repository"
 docker push 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest
 
 echo "Update DEV environment"

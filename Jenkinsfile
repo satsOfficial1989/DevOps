@@ -134,7 +134,7 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazon
 ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazonaws.com docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-app-image:latest'''
 
 	echo 'NOTIFY SLACK'      
-	sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to DEV", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
+	sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to PROD", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       
 	echo 'UPDATE JIRA'	
 sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H "Content-Type: application/json" -X POST --data \'{"body":"*{color:#14892c}Released to Production{color}*"}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-17/comment'

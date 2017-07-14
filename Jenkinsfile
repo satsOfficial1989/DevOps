@@ -17,7 +17,7 @@ pipeline {
         echo 'BUILD DOCKER IMAGE, TAG IT, UPDATE REPO AND DEPLOY'
         sh '''echo "Build Docker Image of the Application"
 $(aws ecr get-login --region us-east-2)
-cd demo-app-1
+cd demo-app-2
 docker build -t dc-demo-app-image .
 
 echo "Tag the Image"
@@ -44,7 +44,7 @@ docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-a
 	sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to DEV", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       
 	echo 'UPDATE JIRA'
-	sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H "Content-Type: application/json" -X POST --data \'{"body":"{color:#14892c}Released to DEV{color}"}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-22/comment'
+	sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H "Content-Type: application/json" -X POST --data \'{"body":"{color:#14892c}Released to DEV{color}"}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-23/comment'
       }
     }
     stage('TEST') {
@@ -73,7 +73,7 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-175-163.us-east-2.compute.amazon
  	sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to TEST", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       
  	echo 'UPDATE JIRA'
- 	sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H "Content-Type: application/json" -X POST --data \'{"body":"{color:#14892c}Released to TEST{color}"}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-22/comment'
+ 	sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H "Content-Type: application/json" -X POST --data \'{"body":"{color:#14892c}Released to TEST{color}"}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-23/comment'
 
       }
     }
@@ -103,7 +103,7 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-159-158.us-east-2.compute.amazon
 	sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to STAGE", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       
 	echo 'UPDATE JIRA'
-	sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H "Content-Type: application/json" -X POST --data \'{"body":"{color:#14892c}Released to STAGE{color}"}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-22/comment'
+	sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H "Content-Type: application/json" -X POST --data \'{"body":"{color:#14892c}Released to STAGE{color}"}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-23/comment'
       }
     }
 
@@ -137,8 +137,8 @@ ssh -i "jenkins-keypair.pem" ec2-user@ec2-13-59-140-240.us-east-2.compute.amazon
 	sh 'curl -X POST --data-urlencode \'payload={"channel": "#ci-cd-demo", "username": "monkey-bot", "text": "Released to PROD", "icon_emoji": ":monkey_face:"}\' https://hooks.slack.com/services/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'
       
 	echo 'UPDATE JIRA'	
-sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H "Content-Type: application/json" -X POST --data \'{"body":"*{color:#14892c}Released to Production{color}*"}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-22/comment'
-sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H "Content-Type: application/json" -X POST -d \'{"transition": {"id": "41"}}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-22/transitions'	      
+sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H "Content-Type: application/json" -X POST --data \'{"body":"*{color:#14892c}Released to Production{color}*"}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-23/comment'
+sh 'curl -D- -u hellopinak@icloud.com:nZdLpbCVUTFw3fxxsFXspyKAk -p -H "Content-Type: application/json" -X POST -d \'{"transition": {"id": "41"}}\' https://dc2017demo.atlassian.net/rest/api/latest/issue/DCDEM-23/transitions'	      
       }
     }
   }

@@ -34,8 +34,7 @@ docker run -d -p 80:80 -t 687517088689.dkr.ecr.us-east-2.amazonaws.com/dc-demo-a
 
 
 '''
-    echo 'RUN FUNCTIONAL TESTS'
-	build(job: 'SeleniumTesting-DEV', wait: true)
+    
 	      
 	echo 'RUN PERFORMANCE TESTS'
  	build 'JMeterTesting-DEV'
